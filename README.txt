@@ -1,4 +1,4 @@
-MYTHOS — Mythology Archive v1
+MYTHOS — Mythology Archive v2
 
 HOW TO OPEN
 1. Download the ZIP.
@@ -21,3 +21,18 @@ This is a static website. Upload index.html, styles.css, and script.js to GitHub
 
 NOTE
 Mythological traditions often have conflicting ancient versions. This first version uses concise mainstream summaries so we can perfect the design and structure first. Later versions can add sources, alternate genealogies, maps, timelines, monsters, heroes, artwork, animations, and much more.
+
+
+V2 MOTION UPDATE
+- Smooth page-to-page transitions
+- Cinematic section reveal animations
+- Staggered cards and list entrances
+- Animated menu links
+- Search overlay transitions
+- Profile opening transitions
+- Premium hover motion
+- Subtle hero ambient motion
+- Sticky header blur while scrolling
+- Reduced-motion accessibility support
+
+Design goal: detailed in content, minimal in interface.

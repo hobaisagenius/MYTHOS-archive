@@ -54,7 +54,26 @@ norse:{nodes:[["odin","Odin","Æsir",420,70],["frigg","Frigg","Æsir",680,70],["
 egyptian:{nodes:[["osiris","Osiris","Ennead",280,80],["isis","Isis","Ennead",500,80],["set","Set","Ennead",720,80],["horus","Horus","Royal",390,280],["anubis","Anubis","Funerary",720,280],["ra","Ra","Solar",100,280],["hathor","Hathor","Solar",100,450],["ma_at","Ma'at","Cosmic",930,280],["thoth","Thoth","Cosmic",930,450]],links:[["osiris","horus"],["isis","horus"],["ra","hathor"],["ra","ma_at"]]}
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], get=id=>E.find(e=>e.id===id);
-function go(id){$$(".page").forEach(p=>p.classList.remove("active"));$("#"+id).classList.add("active");$("#drawer").classList.remove("open");scrollTo({top:0,behavior:"smooth"})}
+function go(id){
+  const current=document.querySelector(".page.active");
+  const next=document.getElementById(id);
+  if(!next || current===next){
+    document.getElementById("drawer").classList.remove("open");
+    return;
+  }
+  if(current){
+    current.classList.add("leaving");
+    current.classList.remove("active");
+    setTimeout(()=>current.classList.remove("leaving"),340);
+  }
+  setTimeout(()=>{
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    next.classList.add("active");
+    document.getElementById("drawer").classList.remove("open");
+    window.scrollTo({top:0,behavior:"smooth"});
+    setTimeout(setupRevealObserver,60);
+  },170);
+})}
 function cards(el){el.innerHTML=Object.entries(pantheons).map(([id,p],i)=>`<article class="pCard" data-p="${id}"><small class="tiny">0${i+1}</small><div class="pGlyph" style="color:${p.color}">${p.glyph}</div><h3>${p.name}</h3><p>${p.blurb}</p><span class="go">↗</span></article>`).join("");el.querySelectorAll("[data-p]").forEach(c=>c.onclick=()=>openPantheon(c.dataset.p))}
 function openPantheon(id){const p=pantheons[id];$("#detailHead").innerHTML=`<div><div class="tiny">${p.note}</div><h1 style="color:${p.color}">${p.name.toUpperCase()}</h1></div><p>${p.blurb}</p><div class="bigGlyph">${p.glyph}</div>`;const ts=["All",...new Set(E.filter(e=>e.pantheon===id).map(e=>e.type))];$("#filters").innerHTML=ts.map((t,i)=>`<button class="${i?"":"active"}" data-t="${t}">${t}</button>`).join("");$("#filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("#filters").querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderEntities(id,b.dataset.t)});renderEntities(id,"All");go("pantheon")}
 function renderEntities(pid,t){const a=E.filter(e=>e.pantheon===pid&&(t==="All"||e.type===t));$("#entityGrid").innerHTML=a.map(e=>`<article class="entity" data-e="${e.id}"><small>${e.type.toUpperCase()}</small><div class="glyph">${e.glyph}</div><h3>${e.name}</h3><p>${e.title}</p></article>`).join("");$("#entityGrid").querySelectorAll("[data-e]").forEach(x=>x.onclick=()=>profile(x.dataset.e))}
@@ -68,3 +87,42 @@ function search(q){q=q.trim().toLowerCase();if(!q){$("#searchResults").innerHTML
 cards($("#homePantheons"));cards($("#pantheonGrid"));renderStories();renderSymbols();setupTrees();
 $$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));$$("[data-story]").forEach(b=>b.onclick=()=>story(b.dataset.story));
 $("#menuBtn").onclick=()=>$("#drawer").classList.add("open");$("#menuClose").onclick=()=>$("#drawer").classList.remove("open");$("#searchOpen").onclick=()=>{$("#search").classList.add("open");setTimeout(()=>$("#searchInput").focus(),60)};$("#searchClose").onclick=()=>$("#search").classList.remove("open");$("#searchInput").oninput=e=>search(e.target.value);$("#profileClose").onclick=()=>$("#profile").classList.remove("open");document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#profile").classList.remove("open");$("#search").classList.remove("open");$("#drawer").classList.remove("open")}});go("home");
+
+
+// Premium reveal system
+let revealObserver;
+function setupRevealObserver(){
+  if(revealObserver) revealObserver.disconnect();
+  const targets=[
+    ".intro",".pantheonCards",".feature",".pageHead",".detailHead",
+    ".filterBar",".entityGrid",".treeBar",".treeWrap",".storyList",
+    ".storyReader",".symbolGrid"
+  ];
+  document.querySelectorAll(targets.join(",")).forEach(el=>{
+    el.classList.add(el.matches(".pantheonCards,.entityGrid,.storyList,.symbolGrid") ? "reveal-stagger" : "reveal");
+  });
+  revealObserver=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("visible");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12,rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".reveal,.reveal-stagger").forEach(el=>revealObserver.observe(el));
+}
+setupRevealObserver();
+
+window.addEventListener("scroll",()=>{
+  document.querySelector("header").classList.toggle("scrolled",window.scrollY>24);
+},{passive:true});
+
+// slight parallax on hero only
+window.addEventListener("mousemove",e=>{
+  const sigil=document.querySelector(".sigil");
+  if(!sigil || !document.getElementById("home").classList.contains("active")) return;
+  const x=(e.clientX/window.innerWidth-.5)*8;
+  const y=(e.clientY/window.innerHeight-.5)*8;
+  sigil.style.marginRight=(-x*.5)+"px";
+  sigil.style.marginTop=(y*.35)+"px";
+},{passive:true});
