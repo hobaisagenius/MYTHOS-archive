@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MYTHOS — The Mythology Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <button class="hamb" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="brand" data-go="home">MYTHOS <i>/ ARCHIVE</i></button>
+  <button class="searchOpen" id="searchOpen">SEARCH</button>
+</header>
+
+<aside class="drawer" id="drawer">
+  <button class="x" id="menuClose">×</button>
+  <div class="tiny">THE ARCHIVE</div>
+  <nav>
+    <button data-go="home"><b>Home</b><small>01</small></button>
+    <button data-go="pantheons"><b>Pantheons</b><small>02</small></button>
+    <button data-go="family"><b>Family Trees</b><small>03</small></button>
+    <button data-go="stories"><b>Stories</b><small>04</small></button>
+    <button data-go="symbols"><b>Symbols & Artifacts</b><small>05</small></button>
+  </nav>
+  <p>GREEK · NORSE · EGYPTIAN<br>MYTHOLOGY REFERENCE</p>
+</aside>
+
+<div class="search" id="search">
+  <button class="x" id="searchClose">×</button>
+  <div class="searchInner">
+    <div class="tiny">SEARCH THE ARCHIVE</div>
+    <input id="searchInput" placeholder="Zeus, Mjölnir, Ragnarök..." autocomplete="off">
+    <div id="searchResults" class="searchResults"></div>
+  </div>
+</div>
+
+<main>
+<section class="page active" id="home">
+  <div class="hero">
+    <div class="orbital o1"></div><div class="orbital o2"></div><div class="orbital o3"></div>
+    <div class="sigil"><div>Μ</div></div>
+    <div class="heroCopy">
+      <div class="tiny">A DIGITAL MUSEUM OF MYTH</div>
+      <h1>THE ARCHIVE<br><em>OF MYTH.</em></h1>
+      <p>Gods, monsters, bloodlines, symbols and stories from three of the world's most enduring mythological traditions.</p>
+      <button class="primary" data-go="pantheons">ENTER THE ARCHIVE <span>↗</span></button>
+    </div>
+    <div class="heroFoot">VOL. I — GREEK / NORSE / EGYPTIAN</div>
+  </div>
+
+  <div class="intro">
+    <div class="num">01</div>
+    <div><div class="tiny">THREE WORLDS</div><h2>Choose a mythology.</h2></div>
+    <p>Each archive has its own gods, family lines, stories, symbols and atmosphere — but everything lives inside one connected system.</p>
+  </div>
+  <div class="pantheonCards" id="homePantheons"></div>
+
+  <div class="feature">
+    <div class="featureArt"><span>12</span></div>
+    <div class="featureText">
+      <div class="tiny">FEATURED STORY · GREEK</div>
+      <h2>The Titanomachy</h2>
+      <p>The ten-year war that ended the age of the Titans and established the Olympian order.</p>
+      <button class="link" data-story="titanomachy">READ THE STORY →</button>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="pantheons">
+  <div class="pageHead">
+    <div class="tiny">02 / PANTHEONS</div>
+    <h1>THREE<br><em>TRADITIONS.</em></h1>
+    <p>Enter a mythology, meet its gods, and explore the relationships and ideas that shaped its stories.</p>
+  </div>
+  <div class="pantheonCards big" id="pantheonGrid"></div>
+</section>
+
+<section class="page" id="pantheon">
+  <div class="detailHead" id="detailHead"></div>
+  <div class="filterBar"><div class="tiny">FIGURES</div><div id="filters"></div></div>
+  <div class="entityGrid" id="entityGrid"></div>
+</section>
+
+<section class="page" id="family">
+  <div class="pageHead compact">
+    <div class="tiny">03 / FAMILY TREES</div>
+    <h1>BLOODLINES<br><em>& BONDS.</em></h1>
+    <p>Choose a tradition and explore its central divine relationships. Click a node to open that figure.</p>
+  </div>
+  <div class="treeBar"><div id="treeTabs"></div><button id="treeReset">RESET</button></div>
+  <div class="treeWrap"><div id="treeCanvas" class="treeCanvas"></div></div>
+</section>
+
+<section class="page" id="stories">
+  <div class="pageHead compact">
+    <div class="tiny">04 / STORIES</div>
+    <h1>MYTHS<br><em>IN MOTION.</em></h1>
+    <p>Major myths presented as chapter-based narratives instead of encyclopedia walls of text.</p>
+  </div>
+  <div id="storyList" class="storyList"></div>
+</section>
+
+<section class="page" id="story"><div id="storyReader" class="storyReader"></div></section>
+
+<section class="page" id="symbols">
+  <div class="pageHead compact">
+    <div class="tiny">05 / SYMBOLS & ARTIFACTS</div>
+    <h1>OBJECTS<br><em>OF POWER.</em></h1>
+    <p>Weapons, sacred objects, emblems and motifs tied to the identities of gods and heroes.</p>
+  </div>
+  <div id="symbolGrid" class="symbolGrid"></div>
+</section>
+</main>
+
+<div class="profile" id="profile">
+  <button class="x" id="profileClose">×</button>
+  <div class="profileGrid">
+    <div id="profileArt" class="profileArt"></div>
+    <div id="profileText" class="profileText"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
