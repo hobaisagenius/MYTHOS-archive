@@ -32,6 +32,9 @@
     <button data-go="realms"><b>Realms</b><small>08</small></button>
     <button data-go="timeline"><b>Timeline</b><small>09</small></button>
     <button data-go="connections"><b>Connections</b><small>10</small></button>
+    <button data-go="discover"><b>Discover</b><small>11</small></button>
+    <button data-go="compare"><b>Compare Myths</b><small>12</small></button>
+    <button data-go="sources"><b>Sources & Variants</b><small>13</small></button>
   </nav>
   <p>GREEK · NORSE · EGYPTIAN<br>MYTHOLOGY REFERENCE</p>
 </aside>
@@ -75,6 +78,20 @@
       <button class="link" data-story="titanomachy">READ THE STORY →</button>
     </div>
   </div>
+
+  <section class="museumPortal">
+    <div class="portalIntro">
+      <div class="tiny">THE LIVING ARCHIVE</div>
+      <h2>Go deeper.</h2>
+      <p>Explore beyond names and summaries. Follow relationships, compare traditions, discover a random archive entry, or read how ancient versions differ.</p>
+    </div>
+    <div class="portalGrid">
+      <button data-go="discover"><span>11</span><b>Discover</b><small>RANDOM ENTRY ↗</small></button>
+      <button data-go="compare"><span>12</span><b>Compare</b><small>TRADITIONS ↗</small></button>
+      <button data-go="connections"><span>10</span><b>Connections</b><small>TRACE RELATIONSHIPS ↗</small></button>
+      <button data-go="sources"><span>13</span><b>Variants</b><small>SOURCES & VERSIONS ↗</small></button>
+    </div>
+  </section>
 </section>
 
 <section class="page" id="pantheons">
@@ -88,6 +105,10 @@
 
 <section class="page" id="pantheon">
   <div class="detailHead" id="detailHead"></div>
+  <div class="pantheonAtmosphere" id="pantheonAtmosphere">
+    <div class="atmLine a"></div><div class="atmLine b"></div><div class="atmLine c"></div>
+    <div class="atmWord" id="atmWord">MYTH</div>
+  </div>
   <div class="filterBar"><div class="tiny">FIGURES</div><div id="filters"></div></div>
   <div class="entityGrid" id="entityGrid"></div>
 </section>
@@ -99,6 +120,7 @@
     <p>Choose a tradition and explore its central divine relationships. Click a node to open that figure.</p>
   </div>
   <div class="treeBar"><div id="treeTabs"></div><button id="treeReset">RESET</button></div>
+  <div class="familyLegend"><span>CLICK A FIGURE TO OPEN PROFILE</span><span>LINES SHOW ARCHIVE RELATIONSHIPS</span></div>
   <div class="treeWrap"><div id="treeCanvas" class="treeCanvas"></div></div>
 </section>
 
@@ -134,7 +156,10 @@
 
 <section class="page" id="realms">
   <div class="pageHead compact"><div class="tiny">08 / REALMS</div><h1>WORLDS<br><em>BEYOND OURS.</em></h1><p>Mountains of gods, lands of the dead, cosmic trees and sacred places that give mythology its geography.</p></div>
-  <div class="realmStage" id="realmStage"></div>
+  <div class="realmUniverse">
+    <div class="realmConstellation" id="realmConstellation"></div>
+    <div class="realmStage" id="realmStage"></div>
+  </div>
 </section>
 
 <section class="page" id="timeline">
@@ -148,6 +173,43 @@
     <div class="selectors"><select id="connectA"></select><div class="connectorMark">↔</div><select id="connectB"></select><button class="primary" id="connectBtn">TRACE CONNECTION</button></div>
     <div id="connectionResult" class="connectionResult"></div>
   </div>
+</section>
+
+
+<section class="page" id="discover">
+  <div class="pageHead compact">
+    <div class="tiny">11 / DISCOVER</div>
+    <h1>ENTER<br><em>THE UNKNOWN.</em></h1>
+    <p>One object from the archive at a time. No list, no index — just a doorway into a god, hero, creature, realm, story or artifact.</p>
+  </div>
+  <div class="discoverStage">
+    <div class="discoverFrame" id="discoverFrame"></div>
+    <button class="primary discoverAgain" id="discoverAgain">DISCOVER ANOTHER <span>↗</span></button>
+  </div>
+</section>
+
+<section class="page" id="compare">
+  <div class="pageHead compact">
+    <div class="tiny">12 / COMPARE MYTHS</div>
+    <h1>SAME QUESTIONS.<br><em>DIFFERENT WORLDS.</em></h1>
+    <p>Compare how traditions approach creation, death, cosmic order, chaos, kingship and the end of the world without pretending the myths are identical.</p>
+  </div>
+  <div class="compareChooser" id="compareChooser"></div>
+  <div class="compareGrid" id="compareGrid"></div>
+</section>
+
+<section class="page" id="sources">
+  <div class="pageHead compact">
+    <div class="tiny">13 / SOURCES & VARIANTS</div>
+    <h1>MYTH HAS<br><em>NO SINGLE CUT.</em></h1>
+    <p>Ancient traditions change across authors, places and centuries. This section records important variations and points toward major source traditions.</p>
+  </div>
+  <div class="sourceIntro">
+    <div class="sourceRule"><span>01</span><h3>Versions differ.</h3><p>Genealogies, motives and even major events can vary between surviving texts and local traditions.</p></div>
+    <div class="sourceRule"><span>02</span><h3>Later retellings matter.</h3><p>Some familiar modern versions depend heavily on later Greek, Roman, medieval or modern retellings.</p></div>
+    <div class="sourceRule"><span>03</span><h3>Context matters.</h3><p>MYTHOS separates concise archive summaries from notes about major alternative traditions.</p></div>
+  </div>
+  <div class="variantList" id="variantList"></div>
 </section>
 
 </main>

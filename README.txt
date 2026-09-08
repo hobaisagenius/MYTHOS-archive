@@ -40,3 +40,25 @@ V4 EXPANSION
 - Realms & places explorer
 - Mythic narrative timelines
 - Interactive connections tracer
+
+
+V5 MAJOR UPDATE — THE LIVING ARCHIVE
+- Improved current archive presentation and interactions
+- New homepage deep-exploration portal
+- Discover: randomized god / hero / creature / realm / story / artifact exploration
+- Compare Myths: side-by-side thematic comparison across Greek, Norse and Egyptian traditions
+- Sources & Variants: notes on conflicting and alternate myth traditions
+- Personal saved archive using local browser storage
+- More interactive expanded archive cards
+- Refined cinematic presentation throughout
+
+
+V5 VISUAL MUSEUM PASS
+- Same v5 version number, expanded in place
+- Richer museum-style deity profiles
+- Added profile context and source-awareness notes
+- Animated pantheon atmosphere sections
+- Upgraded family tree presentation and focus interaction
+- Realm constellation ambience and richer realm detail presentation
+- Deeper cinematic story, symbol, card, and menu motion
+- Stronger visual hierarchy without adding clutter
