@@ -62,3 +62,20 @@ V5 VISUAL MUSEUM PASS
 - Realm constellation ambience and richer realm detail presentation
 - Deeper cinematic story, symbol, card, and menu motion
 - Stronger visual hierarchy without adding clutter
+
+
+V5 UNIVERSAL UPDATE
+- Same v5 site, one universal responsive build
+- iPhone/iOS Safari safe-area support
+- Android Chrome support
+- Tablet layouts
+- Desktop layouts
+- Dynamic viewport units for mobile browser chrome
+- Larger touch targets
+- iOS input zoom prevention
+- Touch-friendly horizontal filter/tree scrolling
+- Mobile profile, search, menu, realms, timeline and connections layouts
+- Landscape phone handling
+- Reduced-motion accessibility
+- Touch-device hover fixes
+- Cache-busted CSS/JS for GitHub Pages

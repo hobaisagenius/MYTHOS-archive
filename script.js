@@ -324,3 +324,30 @@ window.addEventListener("scroll",()=>document.querySelector("header").classList.
 setTimeout(()=>{
  if(typeof setupRevealObserver==="function") setupRevealObserver();
 },100);
+
+
+// V5 UNIVERSAL — viewport compatibility for iOS/Android browser chrome.
+function setUniversalViewport(){
+  document.documentElement.style.setProperty("--app-height", window.innerHeight + "px");
+}
+setUniversalViewport();
+window.addEventListener("resize", setUniversalViewport, {passive:true});
+window.addEventListener("orientationchange", ()=>{
+  setTimeout(setUniversalViewport, 180);
+}, {passive:true});
+
+// Avoid leaving body visually stuck behind overlays on mobile.
+function syncOverlayScrollLock(){
+  const open =
+    document.getElementById("profile")?.classList.contains("open") ||
+    document.getElementById("search")?.classList.contains("open") ||
+    document.getElementById("drawer")?.classList.contains("open") ||
+    document.getElementById("realmModal")?.classList.contains("open");
+  document.body.style.overflow = open ? "hidden" : "";
+}
+document.addEventListener("click", ()=>{
+  requestAnimationFrame(syncOverlayScrollLock);
+}, {passive:true});
+document.addEventListener("keydown", ()=>{
+  requestAnimationFrame(syncOverlayScrollLock);
+});

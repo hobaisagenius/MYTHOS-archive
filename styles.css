@@ -611,3 +611,448 @@ body:after{
 }
 
 .node.focus{border-color:var(--gold);box-shadow:0 0 0 1px rgba(180,149,99,.12),0 18px 60px rgba(0,0,0,.2)}
+
+
+/* =========================================================
+   V5 UNIVERSAL — iOS / ANDROID / TABLET / DESKTOP
+   One responsive build, no separate mobile site.
+   ========================================================= */
+
+html{
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  overscroll-behavior-y:none;
+}
+body{
+  width:100%;
+  min-height:100%;
+  min-height:100dvh;
+  background:var(--bg);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+  padding-bottom:env(safe-area-inset-bottom);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  touch-action:manipulation;
+}
+button,a,input,select,
+.pCard,.entity,.symbol,.storyRow,.archiveCard,.realmBlock,.node,.result{
+  -webkit-tap-highlight-color:transparent;
+}
+button,input,select{
+  font-family:inherit;
+}
+input,select{
+  font-size:16px; /* prevents iOS Safari zoom */
+}
+button,select,input{
+  -webkit-appearance:none;
+  appearance:none;
+  border-radius:0;
+}
+img,svg,canvas{
+  max-width:100%;
+}
+header{
+  height:calc(76px + env(safe-area-inset-top));
+  padding-top:env(safe-area-inset-top);
+  padding-left:max(28px,env(safe-area-inset-left));
+  padding-right:max(28px,env(safe-area-inset-right));
+}
+.page{
+  min-height:100svh;
+  min-height:100dvh;
+}
+.hero{
+  min-height:100svh;
+  min-height:100dvh;
+  padding-top:calc(125px + env(safe-area-inset-top));
+  padding-bottom:calc(80px + env(safe-area-inset-bottom));
+}
+.drawer,.search,.profile,.realmModal{
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.drawer{
+  max-height:100dvh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.search,.profile,.realmModal{
+  height:100dvh;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.profileGrid,.profileArt{
+  min-height:100dvh;
+}
+.treeWrap,.familyStage,.realmUniverse,.filterBar,.archiveFilter,.treeBar{
+  -webkit-overflow-scrolling:touch;
+}
+.treeWrap{
+  overscroll-behavior-x:contain;
+}
+.hamb,.searchOpen,.x,.primary,.link,.bookmarkBtn,
+.filterBar button,.treeBar button,.archiveFilter button,.related button{
+  min-height:44px;
+}
+.hamb{
+  min-width:44px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+}
+.searchOpen{min-width:64px}
+.x{min-width:44px}
+.drawer nav button{min-height:56px}
+.primary,.bookmarkBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Tablet */
+@media (min-width:701px) and (max-width:1100px){
+  .hero{padding-left:6vw;padding-right:6vw}
+  .heroCopy{max-width:61vw}
+  .sigil{right:1vw;width:43vw}
+  .pageHead,.detailHead,.storyReader,.museumPortal,.discoverStage,.connectionLab{
+    padding-left:6vw;
+    padding-right:6vw;
+  }
+  .pantheonAtmosphere{margin-left:6vw;margin-right:6vw}
+  .entityGrid{grid-template-columns:repeat(3,1fr);padding-left:6vw;padding-right:6vw}
+  .archiveGrid{grid-template-columns:repeat(2,1fr);padding-left:6vw;padding-right:6vw}
+  .symbolGrid{grid-template-columns:repeat(2,1fr);padding-left:6vw;padding-right:6vw}
+  .portalGrid{grid-template-columns:repeat(2,1fr)}
+  .compareGrid{grid-template-columns:1fr 1fr}
+  .compareColumn:nth-child(2){border-right:0}
+  .compareColumn:last-child{grid-column:1/-1;border-top:1px solid var(--line)}
+}
+
+/* Phones */
+@media (max-width:700px){
+  header{
+    padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:max(14px,env(safe-area-inset-right));
+  }
+  .brand{
+    font-size:8px;
+    letter-spacing:.09em;
+    white-space:nowrap;
+  }
+  .searchOpen{font-size:8px}
+
+  .hero{
+    display:block;
+    padding:
+      calc(116px + env(safe-area-inset-top))
+      max(20px,6vw)
+      calc(48px + env(safe-area-inset-bottom));
+  }
+  .heroCopy{
+    max-width:100%;
+    position:relative;
+    z-index:4;
+  }
+  .hero h1{
+    font-size:clamp(56px,18vw,82px);
+    line-height:.8;
+    max-width:94vw;
+  }
+  .heroCopy p{
+    max-width:92%;
+    font-size:12px;
+    line-height:1.75;
+  }
+  .primary{
+    width:100%;
+    max-width:370px;
+    min-height:50px;
+  }
+  .sigil{
+    width:78vw;
+    right:-31vw;
+    top:50%;
+    opacity:.28;
+  }
+  .orbital{right:-45vw}
+  .o1{width:108vw;height:108vw}
+  .o2{width:84vw;height:84vw}
+  .o3{width:63vw;height:63vw}
+  .heroFoot{display:none}
+
+  .intro{
+    grid-template-columns:28px 1fr;
+    gap:18px;
+    padding:78px max(20px,6vw) 48px;
+  }
+  .intro p{grid-column:2}
+  .pantheonCards{grid-template-columns:1fr}
+  .pCard{
+    min-height:425px;
+    padding:27px max(20px,6vw);
+    border-right:0;
+  }
+  .pCard h3{margin-top:218px}
+  .feature{grid-template-columns:1fr}
+  .featureArt{min-height:290px;border-right:0}
+  .featureText{padding:68px max(20px,6vw)}
+
+  .pageHead,.detailHead,.storyReader{
+    padding:
+      calc(116px + env(safe-area-inset-top))
+      max(20px,6vw)
+      52px;
+  }
+  .pageHead h1,.detailHead h1{
+    font-size:clamp(55px,17vw,82px);
+    line-height:.8;
+  }
+  .detailHead{
+    min-height:auto;
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .bigGlyph{
+    top:10%;
+    right:-9vw;
+    font-size:145px;
+  }
+
+  .pantheonAtmosphere{
+    margin:0 max(20px,6vw);
+    height:128px;
+  }
+  .atmWord{font-size:68px}
+
+  .filterBar{
+    display:block;
+    padding:24px max(20px,6vw);
+    overflow:hidden;
+  }
+  .filterBar .tiny{margin-bottom:14px}
+  .filterBar #filters,
+  .archiveFilter,
+  #treeTabs{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:8px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:4px;
+  }
+  .filterBar #filters::-webkit-scrollbar,
+  .archiveFilter::-webkit-scrollbar,
+  #treeTabs::-webkit-scrollbar{display:none}
+  .filterBar button,.archiveFilter button,.treeBar button{
+    flex:0 0 auto;
+    white-space:nowrap;
+    min-height:42px;
+  }
+
+  .entityGrid,.archiveGrid,.symbolGrid{
+    grid-template-columns:1fr;
+    padding-left:max(20px,6vw);
+    padding-right:max(20px,6vw);
+  }
+  .entity,.archiveCard,.symbol{
+    border-right:0;
+    min-height:320px;
+  }
+
+  .treeBar{
+    display:block;
+    padding:22px max(20px,6vw);
+  }
+  .treeBar #treeTabs{margin-bottom:12px}
+  .treeWrap{
+    padding-left:max(12px,3vw);
+    padding-right:max(12px,3vw);
+    overflow-x:auto;
+  }
+  .treeCanvas{min-width:1040px}
+  .familyLegend{
+    padding-left:max(20px,6vw);
+    padding-right:max(20px,6vw);
+    flex-direction:column;
+    gap:7px;
+  }
+
+  .storyList{
+    padding-left:max(20px,6vw);
+    padding-right:max(20px,6vw);
+  }
+  .storyRow{
+    grid-template-columns:42px 1fr 26px;
+    gap:14px;
+  }
+  .storyRow h3{font-size:31px}
+  .storyRow p{grid-column:2}
+  .chapter{
+    grid-template-columns:38px 1fr;
+    gap:14px;
+  }
+  .chapter p{grid-column:2}
+
+  .realmStage,.timelineList,.connectionLab,
+  .museumPortal,.discoverStage,.compareChooser,.compareGrid,
+  .sourceIntro,.variantList{
+    padding-left:max(20px,6vw);
+    padding-right:max(20px,6vw);
+  }
+  .realmBlock{
+    grid-template-columns:48px 1fr 25px;
+    gap:14px;
+    min-height:160px;
+  }
+  .realmBlock p{grid-column:2}
+  .realmBlock h3{font-size:34px}
+
+  .portalIntro{grid-template-columns:1fr}
+  .portalGrid{grid-template-columns:1fr}
+  .portalGrid button{min-height:195px}
+
+  .discoverFrame{grid-template-columns:1fr}
+  .discoverVisual{
+    min-height:280px;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+  .discoverCopy{padding:34px 20px 40px}
+  .discoverCopy h2{font-size:60px}
+
+  .compareGrid{grid-template-columns:1fr}
+  .compareColumn{
+    min-height:auto;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding:34px 20px 45px;
+  }
+  .compareColumn h2{margin-top:55px}
+
+  .sourceIntro{grid-template-columns:1fr}
+  .sourceRule{border-right:0;border-bottom:1px solid var(--line)}
+  .variantRow{
+    grid-template-columns:48px 1fr;
+    gap:15px;
+  }
+  .variantRow p{grid-column:2}
+
+  .selectors{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .connectorMark{transform:rotate(90deg)}
+  .selectors select,.selectors .primary{width:100%}
+  .connectionPath{align-items:stretch}
+  .pathNode{width:100%}
+  .pathArrow{transform:rotate(90deg);align-self:center}
+
+  .profileGrid{grid-template-columns:1fr}
+  .profileArt{
+    min-height:40dvh;
+    height:40dvh;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+  .profileArt:before{width:70%}
+  .profileText{
+    padding:
+      60px
+      max(20px,6vw)
+      calc(60px + env(safe-area-inset-bottom));
+  }
+  .profileText h1{
+    font-size:clamp(62px,19vw,92px);
+  }
+  .facts,.profileLore{grid-template-columns:1fr}
+  .profileQuote{font-size:25px}
+  .related button{
+    min-height:42px;
+    margin:4px 2px;
+  }
+
+  .drawer{
+    left:max(12px,env(safe-area-inset-left));
+    right:max(12px,env(safe-area-inset-right));
+    width:auto;
+    max-width:none;
+  }
+  .drawer nav b{font-size:25px}
+  .drawer p{display:none}
+
+  .searchInner{
+    padding:
+      calc(110px + env(safe-area-inset-top))
+      max(20px,6vw)
+      calc(40px + env(safe-area-inset-bottom));
+  }
+  .search input{
+    font-size:clamp(40px,13vw,64px);
+  }
+  .searchResults{grid-template-columns:1fr}
+
+  .realmModal{
+    padding:
+      calc(70px + env(safe-area-inset-top))
+      max(20px,6vw)
+      calc(35px + env(safe-area-inset-bottom));
+  }
+  .realmModalInner h2{font-size:60px}
+  .realmModalInner:before{width:180px;opacity:.6}
+}
+
+/* Very small phones */
+@media (max-width:390px){
+  .hero h1{font-size:54px}
+  .brand i{display:none}
+  .searchOpen{min-width:54px}
+  .pCard{min-height:395px}
+  .pGlyph{font-size:115px}
+  .entity h3,.archiveCard h3,.symbol h3{font-size:32px}
+  .drawer nav b{font-size:23px}
+}
+
+/* Landscape phones */
+@media (max-height:520px) and (orientation:landscape){
+  .hero{
+    min-height:680px;
+    padding-top:100px;
+  }
+  .sigil{opacity:.18}
+  .drawer nav button{min-height:48px}
+  .profileArt{min-height:60vh;height:60vh}
+}
+
+/* Touch devices: remove hover-only movement that can feel sticky */
+@media (hover:none) and (pointer:coarse){
+  .pCard:hover,.entity:hover,.symbol:hover,.storyRow:hover,.archiveCard:hover,
+  .realmBlock:hover,.node:hover,.portalGrid button:hover{
+    transform:none;
+  }
+  .entity:after,.archiveCard:after,.symbol:after{
+    opacity:.55;
+    transform:none;
+  }
+}
+
+/* Desktop pointer devices keep precise hover behavior */
+@media (hover:hover) and (pointer:fine){
+  button,a,.pCard,.entity,.symbol,.storyRow,.archiveCard,.realmBlock,.node,.result{
+    cursor:pointer;
+  }
+}
+
+/* Accessibility / browser compatibility */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .orbital,.sigil,.profileArt:before,.realmConstellation,.atmLine{
+    animation:none!important;
+  }
+}
