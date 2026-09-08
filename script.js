@@ -55,25 +55,22 @@ egyptian:{nodes:[["osiris","Osiris","Ennead",280,80],["isis","Isis","Ennead",500
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], get=id=>E.find(e=>e.id===id);
 function go(id){
+  const next=$("#"+id);
   const current=document.querySelector(".page.active");
-  const next=document.getElementById(id);
-  if(!next || current===next){
-    document.getElementById("drawer").classList.remove("open");
-    return;
-  }
-  if(current){
-    current.classList.add("leaving");
-    current.classList.remove("active");
-    setTimeout(()=>current.classList.remove("leaving"),340);
-  }
+  if(!next){return;}
+  $("#drawer").classList.remove("open");
+  if(current===next){window.scrollTo({top:0,behavior:"smooth"});return;}
+  document.body.classList.add("page-transitioning");
+  if(current) current.classList.add("page-out");
   setTimeout(()=>{
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    next.classList.add("active");
-    document.getElementById("drawer").classList.remove("open");
-    window.scrollTo({top:0,behavior:"smooth"});
-    setTimeout(setupRevealObserver,60);
-  },170);
-})}
+    $$(".page").forEach(p=>p.classList.remove("active","page-out"));
+    next.classList.add("active","page-in");
+    window.scrollTo(0,0);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.remove("page-in")));
+    document.body.classList.remove("page-transitioning");
+    setupRevealObserver();
+  },220);
+}
 function cards(el){el.innerHTML=Object.entries(pantheons).map(([id,p],i)=>`<article class="pCard" data-p="${id}"><small class="tiny">0${i+1}</small><div class="pGlyph" style="color:${p.color}">${p.glyph}</div><h3>${p.name}</h3><p>${p.blurb}</p><span class="go">↗</span></article>`).join("");el.querySelectorAll("[data-p]").forEach(c=>c.onclick=()=>openPantheon(c.dataset.p))}
 function openPantheon(id){const p=pantheons[id];$("#detailHead").innerHTML=`<div><div class="tiny">${p.note}</div><h1 style="color:${p.color}">${p.name.toUpperCase()}</h1></div><p>${p.blurb}</p><div class="bigGlyph">${p.glyph}</div>`;const ts=["All",...new Set(E.filter(e=>e.pantheon===id).map(e=>e.type))];$("#filters").innerHTML=ts.map((t,i)=>`<button class="${i?"":"active"}" data-t="${t}">${t}</button>`).join("");$("#filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("#filters").querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderEntities(id,b.dataset.t)});renderEntities(id,"All");go("pantheon")}
 function renderEntities(pid,t){const a=E.filter(e=>e.pantheon===pid&&(t==="All"||e.type===t));$("#entityGrid").innerHTML=a.map(e=>`<article class="entity" data-e="${e.id}"><small>${e.type.toUpperCase()}</small><div class="glyph">${e.glyph}</div><h3>${e.name}</h3><p>${e.title}</p></article>`).join("");$("#entityGrid").querySelectorAll("[data-e]").forEach(x=>x.onclick=()=>profile(x.dataset.e))}
@@ -86,43 +83,22 @@ function setupTrees(){$("#treeTabs").innerHTML=Object.keys(pantheons).map((id,i)
 function search(q){q=q.trim().toLowerCase();if(!q){$("#searchResults").innerHTML="";return}let R=[];E.forEach(e=>{if((e.name+" "+e.title+" "+e.domains+" "+e.symbols).toLowerCase().includes(q))R.push({n:e.name,t:`${pantheons[e.pantheon].name} · ${e.type}`,k:"e",id:e.id})});stories.forEach(s=>{if((s.title+" "+s.summary).toLowerCase().includes(q))R.push({n:s.title,t:`Story · ${s.pantheon}`,k:"s",id:s.id})});symbols.forEach((s,i)=>{if((s.name+" "+s.owner+" "+s.summary).toLowerCase().includes(q))R.push({n:s.name,t:`Symbol · ${s.pantheon}`,k:"y",id:i})});$("#searchResults").innerHTML=R.slice(0,12).map(r=>`<div class="result" data-k="${r.k}" data-id="${r.id}"><b>${r.n}</b><span>${r.t.toUpperCase()}</span></div>`).join("")||`<div class="tiny">NO RESULTS</div>`;$("#searchResults").querySelectorAll(".result").forEach(r=>r.onclick=()=>{$("#search").classList.remove("open");if(r.dataset.k==="e")profile(r.dataset.id);else if(r.dataset.k==="s")story(r.dataset.id);else go("symbols")})}
 cards($("#homePantheons"));cards($("#pantheonGrid"));renderStories();renderSymbols();setupTrees();
 $$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));$$("[data-story]").forEach(b=>b.onclick=()=>story(b.dataset.story));
-$("#menuBtn").onclick=()=>$("#drawer").classList.add("open");$("#menuClose").onclick=()=>$("#drawer").classList.remove("open");$("#searchOpen").onclick=()=>{$("#search").classList.add("open");setTimeout(()=>$("#searchInput").focus(),60)};$("#searchClose").onclick=()=>$("#search").classList.remove("open");$("#searchInput").oninput=e=>search(e.target.value);$("#profileClose").onclick=()=>$("#profile").classList.remove("open");document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#profile").classList.remove("open");$("#search").classList.remove("open");$("#drawer").classList.remove("open")}});go("home");
+$("#menuBtn").onclick=()=>$("#drawer").classList.toggle("open");$("#menuClose").onclick=()=>$("#drawer").classList.remove("open");$("#searchOpen").onclick=()=>{$("#search").classList.add("open");setTimeout(()=>$("#searchInput").focus(),60)};$("#searchClose").onclick=()=>$("#search").classList.remove("open");$("#searchInput").oninput=e=>search(e.target.value);$("#profileClose").onclick=()=>$("#profile").classList.remove("open");document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#profile").classList.remove("open");$("#search").classList.remove("open");$("#drawer").classList.remove("open")}});go("home");
 
 
-// Premium reveal system
 let revealObserver;
 function setupRevealObserver(){
   if(revealObserver) revealObserver.disconnect();
-  const targets=[
-    ".intro",".pantheonCards",".feature",".pageHead",".detailHead",
-    ".filterBar",".entityGrid",".treeBar",".treeWrap",".storyList",
-    ".storyReader",".symbolGrid"
-  ];
-  document.querySelectorAll(targets.join(",")).forEach(el=>{
-    el.classList.add(el.matches(".pantheonCards,.entityGrid,.storyList,.symbolGrid") ? "reveal-stagger" : "reveal");
+  const selectors=[".intro",".pantheonCards",".feature",".pageHead",".detailHead",".filterBar",".entityGrid",".treeBar",".treeWrap",".storyList",".storyReader",".symbolGrid"];
+  document.querySelectorAll(selectors.join(",")).forEach(el=>{
+    el.classList.add("revealBlock");
+    revealObserver.observe(el);
   });
-  revealObserver=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("visible");
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  },{threshold:.12,rootMargin:"0px 0px -8% 0px"});
-  document.querySelectorAll(".reveal,.reveal-stagger").forEach(el=>revealObserver.observe(el));
 }
+revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){entry.target.classList.add("revealed");revealObserver.unobserve(entry.target);}
+  });
+},{threshold:.09,rootMargin:"0px 0px -5% 0px"});
 setupRevealObserver();
-
-window.addEventListener("scroll",()=>{
-  document.querySelector("header").classList.toggle("scrolled",window.scrollY>24);
-},{passive:true});
-
-// slight parallax on hero only
-window.addEventListener("mousemove",e=>{
-  const sigil=document.querySelector(".sigil");
-  if(!sigil || !document.getElementById("home").classList.contains("active")) return;
-  const x=(e.clientX/window.innerWidth-.5)*8;
-  const y=(e.clientY/window.innerHeight-.5)*8;
-  sigil.style.marginRight=(-x*.5)+"px";
-  sigil.style.marginTop=(y*.35)+"px";
-},{passive:true});
+window.addEventListener("scroll",()=>document.querySelector("header").classList.toggle("scrolled",window.scrollY>20),{passive:true});
