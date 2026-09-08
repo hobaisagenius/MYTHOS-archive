@@ -21,3 +21,22 @@ This is a static website. Upload index.html, styles.css, and script.js to GitHub
 
 NOTE
 Mythological traditions often have conflicting ancient versions. This first version uses concise mainstream summaries so we can perfect the design and structure first. Later versions can add sources, alternate genealogies, maps, timelines, monsters, heroes, artwork, animations, and much more.
+
+
+V4 CINEMATIC MOTION UPDATE
+- Much slower page transitions
+- Longer fade/blur/slide timing
+- Slower staggered card reveals
+- Slower top-drop menu animation
+- Slower profile and search opening
+- Softer, more deliberate hover movement
+- Slower ambient hero motion
+- Designed to feel cinematic and premium rather than fast/snappy
+
+
+V4 EXPANSION
+- Heroes archive
+- Monsters & creatures archive
+- Realms & places explorer
+- Mythic narrative timelines
+- Interactive connections tracer

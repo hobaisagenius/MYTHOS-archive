@@ -55,21 +55,26 @@ egyptian:{nodes:[["osiris","Osiris","Ennead",280,80],["isis","Isis","Ennead",500
 };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], get=id=>E.find(e=>e.id===id);
 function go(id){
-  const next=$("#"+id);
   const current=document.querySelector(".page.active");
-  if(!next){return;}
-  $("#drawer").classList.remove("open");
-  if(current===next){window.scrollTo({top:0,behavior:"smooth"});return;}
-  document.body.classList.add("page-transitioning");
-  if(current) current.classList.add("page-out");
+  const next=document.getElementById(id);
+  if(!next || current===next){
+    document.getElementById("drawer").classList.remove("open");
+    return;
+  }
+  if(current){
+    current.classList.add("leaving");
+    current.classList.remove("active");
+    setTimeout(()=>current.classList.remove("leaving"),760);
+  }
   setTimeout(()=>{
-    $$(".page").forEach(p=>p.classList.remove("active","page-out"));
-    next.classList.add("active","page-in");
-    window.scrollTo(0,0);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.remove("page-in")));
-    document.body.classList.remove("page-transitioning");
-    setupRevealObserver();
-  },220);
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    next.classList.add("active");
+    document.getElementById("drawer").classList.remove("open");
+    window.scrollTo({top:0,behavior:"smooth"});
+    setTimeout(()=>{
+      if(typeof setupRevealObserver==="function") setupRevealObserver();
+    },180);
+  },620);
 }
 function cards(el){el.innerHTML=Object.entries(pantheons).map(([id,p],i)=>`<article class="pCard" data-p="${id}"><small class="tiny">0${i+1}</small><div class="pGlyph" style="color:${p.color}">${p.glyph}</div><h3>${p.name}</h3><p>${p.blurb}</p><span class="go">↗</span></article>`).join("");el.querySelectorAll("[data-p]").forEach(c=>c.onclick=()=>openPantheon(c.dataset.p))}
 function openPantheon(id){const p=pantheons[id];$("#detailHead").innerHTML=`<div><div class="tiny">${p.note}</div><h1 style="color:${p.color}">${p.name.toUpperCase()}</h1></div><p>${p.blurb}</p><div class="bigGlyph">${p.glyph}</div>`;const ts=["All",...new Set(E.filter(e=>e.pantheon===id).map(e=>e.type))];$("#filters").innerHTML=ts.map((t,i)=>`<button class="${i?"":"active"}" data-t="${t}">${t}</button>`).join("");$("#filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("#filters").querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderEntities(id,b.dataset.t)});renderEntities(id,"All");go("pantheon")}
@@ -83,13 +88,127 @@ function setupTrees(){$("#treeTabs").innerHTML=Object.keys(pantheons).map((id,i)
 function search(q){q=q.trim().toLowerCase();if(!q){$("#searchResults").innerHTML="";return}let R=[];E.forEach(e=>{if((e.name+" "+e.title+" "+e.domains+" "+e.symbols).toLowerCase().includes(q))R.push({n:e.name,t:`${pantheons[e.pantheon].name} · ${e.type}`,k:"e",id:e.id})});stories.forEach(s=>{if((s.title+" "+s.summary).toLowerCase().includes(q))R.push({n:s.title,t:`Story · ${s.pantheon}`,k:"s",id:s.id})});symbols.forEach((s,i)=>{if((s.name+" "+s.owner+" "+s.summary).toLowerCase().includes(q))R.push({n:s.name,t:`Symbol · ${s.pantheon}`,k:"y",id:i})});$("#searchResults").innerHTML=R.slice(0,12).map(r=>`<div class="result" data-k="${r.k}" data-id="${r.id}"><b>${r.n}</b><span>${r.t.toUpperCase()}</span></div>`).join("")||`<div class="tiny">NO RESULTS</div>`;$("#searchResults").querySelectorAll(".result").forEach(r=>r.onclick=()=>{$("#search").classList.remove("open");if(r.dataset.k==="e")profile(r.dataset.id);else if(r.dataset.k==="s")story(r.dataset.id);else go("symbols")})}
 cards($("#homePantheons"));cards($("#pantheonGrid"));renderStories();renderSymbols();setupTrees();
 $$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));$$("[data-story]").forEach(b=>b.onclick=()=>story(b.dataset.story));
-$("#menuBtn").onclick=()=>$("#drawer").classList.toggle("open");$("#menuClose").onclick=()=>$("#drawer").classList.remove("open");$("#searchOpen").onclick=()=>{$("#search").classList.add("open");setTimeout(()=>$("#searchInput").focus(),60)};$("#searchClose").onclick=()=>$("#search").classList.remove("open");$("#searchInput").oninput=e=>search(e.target.value);$("#profileClose").onclick=()=>$("#profile").classList.remove("open");document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#profile").classList.remove("open");$("#search").classList.remove("open");$("#drawer").classList.remove("open")}});go("home");
+$("#menuBtn").onclick=()=>$("#drawer").classList.toggle("open");$("#menuClose").onclick=()=>$("#drawer").classList.remove("open");$("#searchOpen").onclick=()=>{$("#search").classList.add("open");setTimeout(()=>$("#searchInput").focus(),420)};$("#searchClose").onclick=()=>$("#search").classList.remove("open");$("#searchInput").oninput=e=>search(e.target.value);$("#profileClose").onclick=()=>$("#profile").classList.remove("open");document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#profile").classList.remove("open");$("#search").classList.remove("open");$("#drawer").classList.remove("open")}});
+const heroes=[
+["Heracles","Greek","Η","MONSTER-SLAYER","Son of Zeus famed above all for the Twelve Labours and a life shaped by extraordinary strength, suffering and eventual apotheosis."],
+["Achilles","Greek","Α","WARRIOR","The greatest Greek fighter at Troy in the Iliad, defined by unmatched martial ability, wrath, grief and a brief heroic life."],
+["Odysseus","Greek","Ο","WANDERER","King of Ithaca and master of cunning whose long return from Troy becomes the Odyssey."],
+["Perseus","Greek","Π","MONSTER-SLAYER","Hero who beheads Medusa and later rescues Andromeda."],
+["Theseus","Greek","Θ","KING & HERO","Athenian hero best known for entering the Cretan labyrinth and killing the Minotaur."],
+["Atalanta","Greek","Λ","HUNTRESS","A swift-footed heroine associated with the Calydonian boar hunt and a famous footrace."],
+["Sigurd","Norse","ᛋ","DRAGON-SLAYER","Hero of Germanic and Norse legendary tradition who kills the dragon Fafnir and becomes entangled in a tragic heroic cycle."],
+["Brynhild","Norse","ᛒ","VALKYRIE","A valkyrie and major figure in the heroic tradition surrounding Sigurd, remembered through complex and tragic legendary narratives."],
+["Beowulf","Norse","ᛒ","LEGENDARY HERO","A Germanic hero rather than a Norse god: slayer of Grendel, Grendel's mother and, late in life, a dragon."],
+["Horus","Egyptian","𓅃","DIVINE HEIR","Although a god rather than a mortal hero, Horus occupies the central heroic role in the struggle to restore legitimate kingship after Osiris."],
+["Sinuhe","Egyptian","𓀀","LITERARY HERO","The protagonist of a Middle Kingdom literary tale about exile, identity, success abroad and return to Egypt."],
+["Setna","Egyptian","𓏏","LITERARY HERO","A learned prince appearing in later Egyptian narrative literature, especially tales about dangerous knowledge and magic."]
+].map(x=>({name:x[0],pantheon:x[1],glyph:x[2],role:x[3],summary:x[4]}));
+
+const creatures=[
+["Medusa","Greek","◉","GORGON","A mortal Gorgon in a widely known later tradition, whose gaze turns observers to stone; Perseus beheads her."],
+["Minotaur","Greek","◈","LABYRINTH BEAST","A bull-headed being confined in the labyrinth on Crete and killed by Theseus."],
+["Cerberus","Greek","⋔","UNDERWORLD GUARDIAN","The multi-headed hound guarding the entrance to Hades."],
+["Hydra","Greek","≋","SERPENT","The many-headed Lernaean Hydra fought by Heracles during his labours."],
+["Fenrir","Norse","ᚾ","GREAT WOLF","The monstrous wolf born to Loki and Angrboða, bound by the gods until Ragnarök."],
+["Jörmungandr","Norse","∞","WORLD SERPENT","The serpent encircling Midgard and Thor's destined opponent."],
+["Níðhöggr","Norse","ᚦ","DRAGON","A destructive serpent or dragon associated with gnawing at the roots of Yggdrasil."],
+["Fafnir","Norse","ᚠ","DRAGON","A figure transformed into a dragon through greed, slain by Sigurd in heroic legend."],
+["Ammit","Egyptian","𓃣","DEVOURER","A composite funerary being who consumes the heart of the unworthy in judgment imagery."],
+["Apep","Egyptian","〰","CHAOS SERPENT","The great serpent of chaos who threatens Ra's solar journey and must be defeated repeatedly."],
+["Sphinx","Egyptian","𓃭","SACRED GUARDIAN","In Egyptian tradition, sphinxes combine a lion's body with a human head and are strongly associated with royal power and guardianship."],
+["Bennu","Egyptian","𓅣","SACRED BIRD","A sacred bird associated with creation, solar renewal and rebirth."]
+].map(x=>({name:x[0],pantheon:x[1],glyph:x[2],role:x[3],summary:x[4]}));
+
+const realms=[
+["Mount Olympus","Greek","△","DIVINE HEIGHT","The mythic home of the Olympian gods, imagined as a remote divine summit and the seat of Zeus's assembly."],
+["Underworld","Greek","▽","REALM OF THE DEAD","The domain ruled by Hades, containing multiple regions and destinations for the dead in different Greek traditions."],
+["Tartarus","Greek","□","PRIMORDIAL DEPTH","A deep cosmic region beneath the earth, used in myth as a prison for defeated divine enemies such as the Titans."],
+["Asgard","Norse","ᛉ","REALM OF THE ÆSIR","The realm associated with the Æsir gods and linked to Midgard by Bifröst."],
+["Midgard","Norse","⊕","HUMAN WORLD","The enclosed world inhabited by humans within the wider Norse cosmos."],
+["Yggdrasil","Norse","ᛦ","COSMIC TREE","The immense world tree around which the Norse cosmos is structured and whose roots and branches connect mythic regions."],
+["Hel","Norse","◐","REALM OF THE DEAD","The realm ruled by Hel and a destination for many who die outside battle."],
+["Duat","Egyptian","𓇽","OTHERWORLD","The dangerous and transformative otherworld through which the sun god travels at night and which is deeply connected to funerary belief."],
+["Field of Reeds","Egyptian","𓆱","BLESSED AFTERLIFE","An idealized afterlife landscape in which the justified dead may continue a perfected existence."],
+["Heliopolis","Egyptian","☉","SACRED COSMOLOGY","A real sacred city that became the center of an influential creation theology focused on Atum and the Ennead."]
+].map(x=>({name:x[0],pantheon:x[1],glyph:x[2],role:x[3],summary:x[4]}));
+
+const timelineData={
+Greek:[
+["Primordial Beginning","Cosmic beings such as Chaos, Gaia and Uranus establish the earliest generations of the mythic cosmos."],
+["Age of the Titans","Cronus overthrows Uranus and the Titans become the dominant divine generation."],
+["Titanomachy","Zeus and his allies defeat Cronus and the Titans after a generational divine war."],
+["Olympian Order","Zeus and the Olympians establish a new divine hierarchy."],
+["Age of Heroes","Cycles surrounding Heracles, Perseus, Theseus, Jason and other heroes unfold."],
+["Trojan Cycle","The war at Troy and the difficult returns of its survivors dominate a major body of heroic tradition."]
+],
+Norse:[
+["Cosmic Beginning","The Norse creation tradition describes an early void and the meeting of elemental regions before the ordered world."],
+["Creation from Ymir","The gods kill the primordial being Ymir and fashion the world from his body."],
+["Divine Orders","Æsir and Vanir traditions become intertwined, while the cosmic worlds and relationships take shape."],
+["Binding of Fenrir","The gods restrain the dangerous wolf Fenrir at the cost of Týr's hand."],
+["Death of Baldr","Baldr's death becomes one of the central signs of the approaching final crisis."],
+["Ragnarök","Gods and monsters meet in catastrophic battles, followed in the surviving sources by images of renewal."]
+],
+Egyptian:[
+["First Time","Egyptian creation traditions imagine a primordial beginning in which ordered existence emerges from an undifferentiated state."],
+["Solar Creation","In Heliopolitan theology, Atum and the succeeding generations of the Ennead establish cosmic relationships."],
+["Rule of Osiris","Osiris represents ordered kingship before his death at the hands of Set."],
+["Isis and Horus","Isis protects and raises Horus as the legitimate heir."],
+["Contendings","Horus and Set struggle over the right to kingship."],
+["Restored Order","Horus embodies living kingship, Osiris rules the dead, and Ma'at represents the order that must continually be maintained."]
+]};
+
+function tabFilter(containerId,values,onPick){
+ const el=document.getElementById(containerId);
+ el.innerHTML=["All",...values].map((x,i)=>`<button class="${i?"":"active"}" data-v="${x}">${x.toUpperCase()}</button>`).join("");
+ el.querySelectorAll("button").forEach(b=>b.onclick=()=>{el.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");onPick(b.dataset.v)});
+}
+function renderArchiveCards(target,data,filter="All"){
+ const a=data.filter(x=>filter==="All"||x.pantheon===filter);
+ document.getElementById(target).innerHTML=a.map(x=>`<article class="archiveCard"><small>${x.pantheon.toUpperCase()}</small><div class="mark">${x.glyph}</div><h3>${x.name}</h3><div class="role">${x.role}</div><p>${x.summary}</p></article>`).join("");
+}
+function setupExpandedArchive(){
+ const traditions=["Greek","Norse","Egyptian"];
+ tabFilter("heroTabs",traditions,v=>renderArchiveCards("heroGrid",heroes,v));renderArchiveCards("heroGrid",heroes);
+ tabFilter("creatureTabs",traditions,v=>renderArchiveCards("creatureGrid",creatures,v));renderArchiveCards("creatureGrid",creatures);
+ document.getElementById("realmStage").innerHTML=realms.map((r,i)=>`<article class="realmBlock" data-realm="${i}"><div class="realmGlyph">${r.glyph}</div><div><small>${r.pantheon.toUpperCase()} · ${r.role}</small><h3>${r.name}</h3></div><p>${r.summary}</p><div>↗</div></article>`).join("");
+ document.querySelectorAll("[data-realm]").forEach(x=>x.onclick=()=>openRealm(+x.dataset.realm));
+ tabFilter("timelineTabs",traditions,v=>renderTimeline(v==="All"?"Greek":v));renderTimeline("Greek");
+ const opts=E.map(e=>`<option value="${e.id}">${e.name} — ${pantheons[e.pantheon].name}</option>`).join("");
+ document.getElementById("connectA").innerHTML=opts;document.getElementById("connectB").innerHTML=opts;
+ document.getElementById("connectB").selectedIndex=Math.min(1,E.length-1);
+ document.getElementById("connectBtn").onclick=traceConnection;
+}
+function openRealm(i){
+ const r=realms[i];let m=document.getElementById("realmModal");
+ if(!m){m=document.createElement("div");m.id="realmModal";m.className="realmModal";m.innerHTML=`<button class="x" id="realmClose">×</button><div class="realmModalInner" id="realmModalInner"></div>`;document.body.appendChild(m);document.getElementById("realmClose").onclick=()=>m.classList.remove("open")}
+ document.getElementById("realmModalInner").innerHTML=`<div class="tiny">${r.pantheon.toUpperCase()} · ${r.role}</div><h2>${r.name}</h2><p>${r.summary}</p>`;
+ m.classList.add("open");
+}
+function renderTimeline(p){
+ document.getElementById("timelineList").innerHTML=(timelineData[p]||[]).map((x,i)=>`<article class="timeRow"><div class="timeNo">${String(i+1).padStart(2,"0")}</div><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("");
+ document.querySelectorAll("#timelineTabs button").forEach(b=>b.classList.toggle("active",b.dataset.v===p));
+}
+function traceConnection(){
+ const a=document.getElementById("connectA").value,b=document.getElementById("connectB").value,out=document.getElementById("connectionResult");
+ if(a===b){out.innerHTML=`<div class="connectionPath"><div class="pathNode"><b>${get(a).name}</b><span>SAME FIGURE</span></div></div>`;return}
+ const graph={};E.forEach(e=>graph[e.id]=new Set(e.relations.filter(r=>get(r))));
+ E.forEach(e=>e.relations.forEach(r=>{if(graph[r])graph[r].add(e.id)}));
+ let q=[[a]],seen=new Set([a]),found=null;
+ while(q.length){let path=q.shift(),last=path[path.length-1];for(const n of graph[last]||[]){if(seen.has(n))continue;let np=[...path,n];if(n===b){found=np;q=[];break}seen.add(n);q.push(np)}}
+ if(!found){out.innerHTML=`<div class="connectionNote">No relationship path is currently encoded between these two figures. The archive will gain more relationship data in later versions.</div>`;return}
+ out.innerHTML=`<div class="connectionPath">${found.map((id,i)=>`${i?'<span class="pathArrow">→</span>':''}<button class="pathNode" data-pe="${id}"><b>${get(id).name}</b><span>${get(id).type.toUpperCase()}</span></button>`).join("")}</div><div class="connectionNote">This path follows relationships currently encoded in the MYTHOS archive. It is a navigation aid, not a claim that every link represents the same kind of kinship or mythic relationship.</div>`;
+ out.querySelectorAll("[data-pe]").forEach(x=>x.onclick=()=>profile(x.dataset.pe));
+}
+setupExpandedArchive();
+
+go("home");
 
 
 let revealObserver;
 function setupRevealObserver(){
   if(revealObserver) revealObserver.disconnect();
-  const selectors=[".intro",".pantheonCards",".feature",".pageHead",".detailHead",".filterBar",".entityGrid",".treeBar",".treeWrap",".storyList",".storyReader",".symbolGrid"];
+  const selectors=[".intro",".pantheonCards",".feature",".pageHead",".detailHead",".filterBar",".entityGrid",".treeBar",".treeWrap",".storyList",".storyReader",".symbolGrid",".archiveFilter",".archiveGrid",".realmStage",".timelineList",".connectionLab"];
   document.querySelectorAll(selectors.join(",")).forEach(el=>{
     el.classList.add("revealBlock");
     revealObserver.observe(el);
@@ -102,3 +221,7 @@ revealObserver=new IntersectionObserver(entries=>{
 },{threshold:.09,rootMargin:"0px 0px -5% 0px"});
 setupRevealObserver();
 window.addEventListener("scroll",()=>document.querySelector("header").classList.toggle("scrolled",window.scrollY>20),{passive:true});
+
+setTimeout(()=>{
+ if(typeof setupRevealObserver==="function") setupRevealObserver();
+},100);

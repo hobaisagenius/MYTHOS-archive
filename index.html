@@ -27,6 +27,11 @@
     <button data-go="family"><b>Family Trees</b><small>03</small></button>
     <button data-go="stories"><b>Stories</b><small>04</small></button>
     <button data-go="symbols"><b>Symbols & Artifacts</b><small>05</small></button>
+    <button data-go="heroes"><b>Heroes</b><small>06</small></button>
+    <button data-go="creatures"><b>Creatures</b><small>07</small></button>
+    <button data-go="realms"><b>Realms</b><small>08</small></button>
+    <button data-go="timeline"><b>Timeline</b><small>09</small></button>
+    <button data-go="connections"><b>Connections</b><small>10</small></button>
   </nav>
   <p>GREEK · NORSE · EGYPTIAN<br>MYTHOLOGY REFERENCE</p>
 </aside>
@@ -116,6 +121,35 @@
   </div>
   <div id="symbolGrid" class="symbolGrid"></div>
 </section>
+
+<section class="page" id="heroes">
+  <div class="pageHead compact"><div class="tiny">06 / HEROES</div><h1>MORTALS<br><em>OF LEGEND.</em></h1><p>Warriors, wanderers, kings and monster-slayers whose choices became part of myth.</p></div>
+  <div class="archiveFilter" id="heroTabs"></div><div class="archiveGrid" id="heroGrid"></div>
+</section>
+
+<section class="page" id="creatures">
+  <div class="pageHead compact"><div class="tiny">07 / CREATURES</div><h1>BEASTS<br><em>& MONSTERS.</em></h1><p>Guardians, destroyers and impossible beings that occupy the edges of the mythic world.</p></div>
+  <div class="archiveFilter" id="creatureTabs"></div><div class="archiveGrid" id="creatureGrid"></div>
+</section>
+
+<section class="page" id="realms">
+  <div class="pageHead compact"><div class="tiny">08 / REALMS</div><h1>WORLDS<br><em>BEYOND OURS.</em></h1><p>Mountains of gods, lands of the dead, cosmic trees and sacred places that give mythology its geography.</p></div>
+  <div class="realmStage" id="realmStage"></div>
+</section>
+
+<section class="page" id="timeline">
+  <div class="pageHead compact"><div class="tiny">09 / TIMELINE</div><h1>MYTHIC<br><em>AGES.</em></h1><p>Myths do not form a single historical chronology. This view instead traces narrative sequences within each tradition.</p></div>
+  <div class="archiveFilter" id="timelineTabs"></div><div class="timelineList" id="timelineList"></div>
+</section>
+
+<section class="page" id="connections">
+  <div class="pageHead compact"><div class="tiny">10 / CONNECTIONS</div><h1>THREADS<br><em>BETWEEN GODS.</em></h1><p>Select two figures and trace a shortest relationship path through the archive.</p></div>
+  <div class="connectionLab">
+    <div class="selectors"><select id="connectA"></select><div class="connectorMark">↔</div><select id="connectB"></select><button class="primary" id="connectBtn">TRACE CONNECTION</button></div>
+    <div id="connectionResult" class="connectionResult"></div>
+  </div>
+</section>
+
 </main>
 
 <div class="profile" id="profile">
